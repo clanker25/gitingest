@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "Python Debugger: Module",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "server",
+            "args": [],
+            "cwd": "${workspaceFolder}/src"
+        }
+    ]
+}

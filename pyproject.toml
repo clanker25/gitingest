@@ -1,0 +1,133 @@
+[project]
+name = "gitingest"
+version = "0.3.1"
+description="CLI tool to analyze and create text dumps of codebases for LLMs"
+readme = {file = "README.md", content-type = "text/markdown" }
+requires-python = ">= 3.8"
+dependencies = [
+    "click>=8.0.0",
+    "gitpython>=3.1.0",
+    "httpx",
+    "loguru>=0.7.0",
+    "pathspec>=0.12.1",
+    "pydantic",
+    "python-dotenv",
+    "starlette>=0.40.0",  # Minimum safe release (https://osv.dev/vulnerability/GHSA-f96h-pmfr-66vw)
+    "strenum; python_version < '3.11'",
+    "tiktoken>=0.7.0",  # Support for o200k_base encoding
+    "typing_extensions>= 4.0.0; python_version < '3.10'",
+]
+
+license = {file = "LICENSE"}
+authors = [
+    { name = "Romain Courtois", email = "romain@coderamp.io" },
+    { name = "Filip Christiansen"},
+]
+classifiers=[
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.optional-dependencies]
+dev = [
+    "eval-type-backport",
+    "pre-commit",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-mock",
+]
+
+server = [
+    "boto3>=1.28.0",  # AWS SDK for S3 support
+    "fastapi[standard]>=0.109.1",  # Minimum safe release (https://osv.dev/vulnerability/PYSEC-2024-38)
+    "prometheus-client",
+    "sentry-sdk[fastapi]",
+    "slowapi",
+    "uvicorn>=0.11.7",  # Minimum safe release (https://osv.dev/vulnerability/PYSEC-2020-150)
+]
+
+[project.scripts]
+gitingest = "gitingest.__main__:main"
+
+[project.urls]
+homepage = "https://gitingest.com"
+github = "https://github.com/coderamp-labs/gitingest"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = {find = {where = ["src"]}}
+include-package-data = true
+
+# Linting configuration
+[tool.pylint.format]
+max-line-length = 119
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "too-many-arguments",
+    "too-many-positional-arguments",
+    "too-many-locals",
+    "too-few-public-methods",
+    "broad-exception-caught",
+    "duplicate-code",
+    "fixme",
+]
+
+[tool.ruff]
+line-length = 120
+fix = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [  # https://docs.astral.sh/ruff/rules/...
+    "D107", # undocumented-public-init
+    "FIX002", # line-contains-todo
+    "TD002", # missing-todo-author
+    "PLR0913", # too-many-arguments,
+
+    # TODO: fix the following issues:
+    "TD003", # missing-todo-link, TODO: add issue links
+    "S108", # hardcoded-temp-file, TODO: replace with tempfile
+    "BLE001", # blind-except, TODO: replace with specific exceptions
+    "FAST003", # fast-api-unused-path-parameter, TODO: fix
+]
+per-file-ignores = { "tests/**/*.py" = ["S101"] } # Skip the "assert used" warning
+
+[tool.ruff.lint.pylint]
+max-returns = 10
+
+[tool.ruff.lint.isort]
+order-by-type = true
+case-sensitive = true
+
+[tool.pycln]
+all = true
+
+# TODO: Remove this once we figure out how to use ruff-isort
+[tool.isort]
+profile = "black"
+line_length = 118
+remove_redundant_aliases = true
+float_to_top = true  # https://github.com/astral-sh/ruff/issues/6514
+order_by_type = true
+filter_files = true
+
+# Test configuration
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests/"]
+python_files = "test_*.py"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+python_classes = "Test*"
+python_functions = "test_*"
