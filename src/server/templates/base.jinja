@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {# Favicons #}
+        <link rel="icon" type="image/x-icon" href="/static/favicons/favicon.ico">
+        <link rel="icon" type="image/svg+xml" href="/static/favicons/favicon.svg">
+        <link rel="icon"
+              type="image/png"
+              href="/static/favicons/favicon-64.png"
+              sizes="64x64">
+        <link rel="apple-touch-icon"
+              type="image/png"
+              href="/static/favicons/apple-touch-icon.png"
+              sizes="180x180">
+        {# Search Engine Meta Tags #}
+        <meta name="title"       content="Gitingest">
+        <meta name="description"
+              content="Replace 'hub' with 'ingest' in any GitHub URL for a prompt-friendly text.">
+        <meta name="keywords"
+              content="Gitingest, AI tools, LLM integration, Ingest, Digest, Context, Prompt, Git workflow, codebase extraction, Git repository, Git automation, Summarize, prompt-friendly">
+        <meta name="robots"      content="index, follow">
+        {# Open Graph Meta Tags #}
+        <meta property="og:title"       content="Gitingest">
+        <meta property="og:description"
+              content="Replace 'hub' with 'ingest' in any GitHub URL for a prompt-friendly text.">
+        <meta property="og:type"        content="website">
+        <meta property="og:url"         content="{{ request.url }}">
+        <meta property="og:image"       content="/static/og-image.png">
+        {# Web App Meta #}
+        <meta name="apple-mobile-web-app-title"            content="Gitingest">
+        <meta name="application-name"                      content="Gitingest">
+        <meta name="theme-color"                           content="#FCA847">
+        <meta name="mobile-web-app-capable"                content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        {# Twitter card #}
+        <meta name="twitter:card"        content="summary_large_image">
+        <meta name="twitter:title"       content="Gitingest">
+        <meta name="twitter:description"
+              content="Replace 'hub' with 'ingest' in any GitHub URL for a prompt-friendly text.">
+        <meta name="twitter:image"       content="/static/og-image.png">
+        {# Title #}
+        <title>
+            {% block title %}
+                {% if short_repo_url %}
+                    Gitingest - {{ short_repo_url }}
+                {% else %}
+                    Gitingest
+                {% endif %}
+            {% endblock %}
+        </title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        {% include 'components/tailwind_components.html' %}
+    </head>
+    <body class="bg-[#FFFDF8] min-h-screen flex flex-col">
+        {% include 'components/navbar.jinja' %}
+        {# Main content wrapper #}
+        <main class="flex-1 w-full">
+            <div class="max-w-4xl mx-auto px-4 py-8">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+        {# Footer #}
+        {% include 'components/footer.jinja' %}
+        {# Scripts #}
+        <script defer src="/static/js/index.js"></script>
+        <script defer src="/static/js/utils.js"></script>
+        <script defer src="/static/js/posthog.js"></script>
+    </body>
+</html>
